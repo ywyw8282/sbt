@@ -21,24 +21,26 @@
       <a id="nav-community" onclick="showPage('community')">커뮤니티</a>
       <div class="comm-dropdown-menu" id="commDropdownMenu" onmouseenter="cancelCloseCommDropdown()" onmouseleave="scheduleCloseCommDropdown()">
         <div class="dmenu-inner">
-          <a onclick="showPage('community');switchCommTab('all');closeCommDropdown()">📋 전체</a>
-          <a onclick="showPage('community');switchCommTab('best');closeCommDropdown()">🏆 베스트</a>
+          <a onclick="showPage('community');switchCommTab('all');closeCommDropdown()">전체</a>
+          <a onclick="showPage('community');switchCommTab('best');closeCommDropdown()">베스트</a>
           <div class="dmenu-divider"></div>
-          <a onclick="showPage('community');switchCommTab('free');closeCommDropdown()">💬 자유</a>
-          <a onclick="showPage('community');switchCommTab('qna');closeCommDropdown()">❓ 질문</a>
-          <a onclick="showPage('community');switchCommTab('info');closeCommDropdown()">📌 정보</a>
+          <a onclick="showPage('community');switchCommTab('free');closeCommDropdown()">자유</a>
+          <a onclick="showPage('community');switchCommTab('qna');closeCommDropdown()">질문</a>
+          <a onclick="showPage('community');switchCommTab('info');closeCommDropdown()">정보</a>
+          <a onclick="showPage('community');switchCommTab('matcmt');closeCommDropdown()">자재추가설명</a>
         </div>
       </div>
     </div>
+    <a id="nav-termSearch" onclick="showPage('matlist');switchMatListTab('term')">현장용어 검색</a>
     <a id="nav-job" onclick="showPage('job')">구인구직</a>
     <a id="nav-company" onclick="showPage('company')">업체 정보</a>
     <a id="nav-news" onclick="showPage('news')">건설뉴스</a>
     <a id="nav-safety" onclick="showPage('safety')">건설안전</a>
     <a id="nav-notice" onclick="showPage('notice')">공지사항</a>
-    <a id="nav-docs" onclick="showPage('docs')" style="color:#A8C4FF">공무자료실</a>
-    <a id="nav-help" onclick="showPage('help')" style="color:#FFB347;font-weight:600">🔧 도움요청</a>
-    <a id="nav-board" onclick="showPage('board')" style="color:#FFB347;font-weight:500">동산보드</a>
-    <a id="nav-matlist" onclick="showPage('matlist')" style="color:#A8C4FF;font-weight:500">📖 자재·용어집</a>
+    <a id="nav-docs" onclick="showPage('docs')">공무자료실</a>
+    <a id="nav-help" onclick="showPage('help')">도움요청</a>
+    <a id="nav-board" onclick="showPage('board')">동산보드</a>
+    <a id="nav-matlist" onclick="showPage('matlist')">자재·용어집</a>
   </nav>
   <div class="header-right" id="headerRight">
     <button class="btn-login" onclick="openLoginModal()">로그인</button>

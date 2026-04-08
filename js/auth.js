@@ -859,6 +859,147 @@ function loadAdminChargeReqs(){
   }).catch(function(){ if(listEl) listEl.innerHTML='<div style="text-align:center;padding:32px;color:#c04040">네트워크 오류</div>'; });
 }
 
+/* ══ 관리자 회원 관리 ══ */
+var _adminMembers = [];
+
+function openAdminMemberModal(){
+  var m = document.getElementById('adminMemberModal');
+  if(!m) return;
+  m.style.display='flex';
+  _adminMembers = [];
+  document.getElementById('adminMemberList').innerHTML='<div style="text-align:center;padding:32px;color:var(--text-light)">불러오는 중...</div>';
+
+  // MySQL 회원 목록
+  var dbMembers = fetch('/api/user.php?action=list',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({admin_pw: ADMIN_PW})
+  }).then(function(r){return r.json();}).then(function(res){ return res.users||[]; }).catch(function(){return [];});
+
+  // 네이버 회원 목록
+  var naverMembers = fetch('/api/user.php?action=list_naver',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({admin_pw: ADMIN_PW})
+  }).then(function(r){return r.json();}).then(function(res){ return res.users||[]; }).catch(function(){return [];});
+
+  Promise.all([dbMembers, naverMembers]).then(function(results){
+    var db = results[0].map(function(u){ return Object.assign({}, u, {_src:'db'}); });
+    var nv = results[1].map(function(u){ return Object.assign({}, u, {_src:'naver', type:'naver'}); });
+    _adminMembers = db.concat(nv);
+    renderAdminMemberList();
+  });
+}
+
+function closeAdminMemberModal(){
+  var m = document.getElementById('adminMemberModal');
+  if(m) m.style.display='none';
+}
+
+function renderAdminMemberList(){
+  var q = (document.getElementById('adminMemberSearch')||{}).value||'';
+  q = q.toLowerCase();
+  var list = _adminMembers.filter(function(u){
+    if(!q) return true;
+    return (u.username||'').toLowerCase().includes(q)||(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q);
+  });
+  var el = document.getElementById('adminMemberList');
+  if(!el) return;
+  if(!list.length){ el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px">검색 결과 없음</div>'; return; }
+
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    +'<thead><tr style="background:var(--surface);border-bottom:2px solid var(--border)">'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">구분</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">아이디</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">닉네임</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">이메일</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">등급</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">캐시</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">비밀번호</th>'
+    +'<th style="padding:8px 10px;text-align:left;color:var(--text-mid)">조정</th>'
+    +'</tr></thead><tbody>'
+    + list.map(function(u){
+      var isNaver = (u._src==='naver'||u.type==='naver');
+      var badge = isNaver
+        ? '<span style="padding:2px 7px;background:#03C75A;color:#fff;border-radius:10px;font-size:10px;font-weight:700">네이버</span>'
+        : '<span style="padding:2px 7px;background:#2563EB;color:#fff;border-radius:10px;font-size:10px;font-weight:700">일반</span>';
+      var pwCell = isNaver
+        ? '<span style="color:var(--text-light);font-size:11px">OAuth</span>'
+        : '<button onclick="adminResetPwPrompt('+JSON.stringify(u.id)+','+JSON.stringify(u.name)+')" style="padding:3px 8px;background:#EF4444;color:#fff;border:none;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;font-family:\'Noto Sans KR\',sans-serif">초기화</button>';
+      var adjBtn = isNaver
+        ? '<span style="color:var(--text-light);font-size:11px">-</span>'
+        : '<button onclick="openAdminMemberEditModal('+u.id+','+JSON.stringify(u.name)+','+JSON.stringify(u.grade)+')" style="padding:3px 8px;background:#1A2F5A;color:#fff;border:none;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;font-family:\'Noto Sans KR\',sans-serif">조정</button>';
+      return '<tr style="border-bottom:1px solid var(--border-light)">'
+        +'<td style="padding:8px 10px">'+badge+'</td>'
+        +'<td style="padding:8px 10px;font-weight:600">'+(u.username||u.id||'-')+'</td>'
+        +'<td style="padding:8px 10px">'+(u.name||'-')+'</td>'
+        +'<td style="padding:8px 10px;color:var(--text-mid)">'+(u.email||'-')+'</td>'
+        +'<td style="padding:8px 10px">'+(u.grade||'-')+'</td>'
+        +'<td style="padding:8px 10px;color:var(--orange);font-weight:700">'+(u.cash!=null?(u.cash).toLocaleString()+'전':'-')+'</td>'
+        +'<td style="padding:8px 10px">'+pwCell+'</td>'
+        +'<td style="padding:8px 10px">'+adjBtn+'</td>'
+        +'</tr>';
+    }).join('')
+    +'</tbody></table>';
+}
+
+function openAdminMemberEditModal(userId, userName, userGrade){
+  var m = document.getElementById('adminMemberEditModal');
+  if(!m) return;
+  document.getElementById('adminEditUserId').value = userId;
+  document.getElementById('adminEditTitle').textContent = '회원 조정: '+userName;
+  document.getElementById('adminEditGrade').value = userGrade || '용역';
+  document.getElementById('adminEditExp').value = '';
+  document.getElementById('adminEditCash').value = '';
+  document.getElementById('adminEditPoint').value = '';
+  var msg = document.getElementById('adminEditMsg');
+  if(msg){ msg.style.display='none'; msg.textContent=''; }
+  m.style.display='flex';
+}
+
+function closeAdminMemberEditModal(){
+  var m = document.getElementById('adminMemberEditModal');
+  if(m) m.style.display='none';
+}
+
+function submitAdminMemberEdit(){
+  var uid = document.getElementById('adminEditUserId').value;
+  var grade = document.getElementById('adminEditGrade').value;
+  var exp = document.getElementById('adminEditExp').value;
+  var cash = document.getElementById('adminEditCash').value;
+  var point = document.getElementById('adminEditPoint').value;
+  var msg = document.getElementById('adminEditMsg');
+  var body = {user_id: parseInt(uid), grade: grade, admin_pw: ADMIN_PW};
+  if(exp) body.exp = parseInt(exp);
+  if(cash) body.cash = parseInt(cash);
+  if(point) body.point = parseInt(point);
+
+  fetch('/api/user.php?action=adjust',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  }).then(function(r){return r.json();}).then(function(res){
+    if(res.ok){
+      if(msg){ msg.style.display='block'; msg.style.color='#059669'; msg.textContent='적용됐습니다.'; }
+      setTimeout(function(){ closeAdminMemberEditModal(); openAdminMemberModal(); }, 800);
+    } else {
+      if(msg){ msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent=res.msg||'오류 발생'; }
+    }
+  }).catch(function(){
+    if(msg){ msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent='네트워크 오류'; }
+  });
+}
+
+function adminResetPwPrompt(userId, userName){
+  var newPw = prompt(userName+' 회원의 새 비밀번호를 입력하세요 (8자 이상):');
+  if(!newPw) return;
+  if(newPw.length < 8){ alert('비밀번호는 8자 이상이어야 합니다.'); return; }
+  fetch('/api/user.php?action=admin_reset_pw',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({user_id: userId, new_pw: newPw, admin_pw: ADMIN_PW})
+  }).then(function(r){return r.json();}).then(function(res){
+    if(res.ok) alert('비밀번호가 초기화됐습니다.');
+    else alert(res.msg||'오류 발생');
+  }).catch(function(){ alert('네트워크 오류'); });
+}
+
 function adminProcessCharge(id, amount, depositor, act){
   var label = act==='approve' ? '승인' : '거절';
   if(!confirm(Number(amount).toLocaleString()+'전 / 입금자: '+depositor+'\n\n'+label+' 처리하시겠습니까?')) return;

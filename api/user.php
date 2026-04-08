@@ -192,6 +192,27 @@ switch ($action) {
         }
         break;
 
+    // ── 관리자: 네이버 회원 목록 ────────────────
+    case 'list_naver':
+        requireAdmin();
+        $file = __DIR__ . '/../naver_users.json';
+        if (!file_exists($file)) { jsonOk(['users'=>[]]); }
+        $users = json_decode(file_get_contents($file), true) ?: [];
+        jsonOk(['users' => $users]);
+        break;
+
+    // ── 관리자: 비밀번호 초기화 ─────────────────
+    case 'admin_reset_pw':
+        requireAdmin();
+        $userId = (int)($input['user_id'] ?? 0);
+        $newPw  = $input['new_pw'] ?? '';
+        if (!$userId) jsonErr('user_id 필요');
+        if (strlen($newPw) < 8) jsonErr('비밀번호는 8자 이상이어야 합니다.');
+        $db = getDB();
+        $db->prepare("UPDATE sbt_users SET password=? WHERE id=?")->execute([password_hash($newPw, PASSWORD_BCRYPT), $userId]);
+        jsonOk(['msg'=>'비밀번호가 초기화됐습니다.']);
+        break;
+
     default:
         jsonErr('알 수 없는 요청');
 }

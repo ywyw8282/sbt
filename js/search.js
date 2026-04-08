@@ -1318,46 +1318,6 @@ function initSearchHTML(){
     </div>
   </section>
 
-  <div class="category-bar">
-    <div class="cat-bar-inner">
-
-      <div class="cat-item active" id="catAll" onclick="filterCat(this,'전체')">전체</div>
-
-      <div class="cat-dropdown" id="dd-설비" onmouseenter="openDrop('설비')" onmouseleave="scheduleDrop('설비')">
-        <button class="cat-dropdown-btn" id="btn-설비" onclick="filterCat(this,'설비')">설비 <span class="cat-arrow">▼</span></button>
-        <div class="cat-submenu" id="sub-설비" onmouseenter="cancelDrop('설비')" onmouseleave="scheduleDrop('설비')">
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'배관')"><span class="cat-sub-dot"></span>배관 / 관부속</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'밸브')"><span class="cat-sub-dot"></span>밸브류</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'덕트')"><span class="cat-sub-dot"></span>덕트류</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'보온재')"><span class="cat-sub-dot"></span>보온재</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'위생도기')"><span class="cat-sub-dot"></span>위생도기</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'펌프')"><span class="cat-sub-dot"></span>펌프 / 기계</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'계측')"><span class="cat-sub-dot"></span>계측기기</div>
-        </div>
-      </div>
-
-      <div class="cat-dropdown" id="dd-전기" onmouseenter="openDrop('전기')" onmouseleave="scheduleDrop('전기')">
-        <button class="cat-dropdown-btn" id="btn-전기" onclick="filterCat(this,'전기')">전기 <span class="cat-arrow">▼</span></button>
-        <div class="cat-submenu" id="sub-전기" onmouseenter="cancelDrop('전기')" onmouseleave="scheduleDrop('전기')">
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'전선')"><span class="cat-sub-dot"></span>전선 / 케이블</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'전선관')"><span class="cat-sub-dot"></span>전선관</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'배전')"><span class="cat-sub-dot"></span>배전반 / 분전반</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'조명')"><span class="cat-sub-dot"></span>조명기구</div>
-        </div>
-      </div>
-
-      <div class="cat-dropdown" id="dd-소방" onmouseenter="openDrop('소방')" onmouseleave="scheduleDrop('소방')">
-        <button class="cat-dropdown-btn" id="btn-소방" onclick="filterCat(this,'소방')">소방 <span class="cat-arrow">▼</span></button>
-        <div class="cat-submenu" id="sub-소방" onmouseenter="cancelDrop('소방')" onmouseleave="scheduleDrop('소방')">
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'스프링클러')"><span class="cat-sub-dot"></span>스프링클러</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'소화전')"><span class="cat-sub-dot"></span>소화전</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'소화기')"><span class="cat-sub-dot"></span>소화기</div>
-          <div class="cat-submenu-item" onclick="filterSubCat(this,'감지기')"><span class="cat-sub-dot"></span>감지기 / 경보</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
 
   <div class="main">
     <div class="result-header">
@@ -1399,48 +1359,39 @@ function initSearchHTML(){
     </div>
   </div>
 
-  <!-- 메인 하단 커뮤니티 미리보기 (조회수/추천수 기반 인기글) -->
-  <div class="community-section">
+  <!-- 베스트 게시판 미리보기 -->
+  <div class="community-section" style="margin-bottom:0;border-bottom:none">
     <div class="section-header">
-      <div class="section-title">커뮤니티 인기글</div>
+      <div class="section-title">베스트 게시판</div>
+      <a class="section-more" onclick="showPage('community');switchCommTab('best')">전체 보기 →</a>
+    </div>
+    <div id="homeBestPosts" style="display:flex;flex-direction:column;gap:0">
+      <div style="padding:20px;text-align:center;color:var(--text-light);font-size:13px">불러오는 중...</div>
+    </div>
+  </div>
+
+  <!-- 게시판 4개 -->
+  <div class="community-section" style="margin-top:0;padding-top:0">
+    <div class="section-header" style="margin-bottom:14px">
+      <div class="section-title">커뮤니티</div>
       <a class="section-more" onclick="showPage('community')">전체 보기 →</a>
     </div>
-    <div class="community-grid">
-      <div class="comm-board" onclick="showPage('community')">
-        <div class="comm-board-header"><div class="comm-icon ic-설비">설</div><div class="comm-board-name">설비 게시판</div></div>
-        <div class="comm-post-list">
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">동파이프 vs 스테인리스 배관 차이점</span><span class="comm-post-stat">조회 842</span></div>
-          <div class="comm-post"><span class="comm-post-title">위생도기 시공 순서 여쭤봅니다</span><span class="comm-post-stat">추천 34</span></div>
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">급탕 배관 단열재 추천해주세요</span><span class="comm-post-stat">조회 621</span></div>
-          <div class="comm-post"><span class="comm-post-title">바닥난방 배관 피치 기준</span><span class="comm-post-stat">추천 21</span></div>
-        </div>
+    <div class="community-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="comm-board" onclick="showPage('community');switchCommTab('free')">
+        <div class="comm-board-header"><div class="comm-icon" style="background:#3B82F6;color:#fff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">자</div><div class="comm-board-name">자유게시판</div></div>
+        <div class="comm-post-list" id="homeBoard-free"><div class="comm-post" style="color:var(--text-light);font-size:12px">불러오는 중...</div></div>
       </div>
-      <div class="comm-board" onclick="showPage('community')">
-        <div class="comm-board-header"><div class="comm-icon ic-전기">전</div><div class="comm-board-name">전기 게시판</div></div>
-        <div class="comm-post-list">
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">CV케이블과 FR-CV 차이 알려주세요</span><span class="comm-post-stat">조회 754</span></div>
-          <div class="comm-post"><span class="comm-post-title">분전반 설치 간격 기준</span><span class="comm-post-stat">추천 28</span></div>
-          <div class="comm-post"><span class="comm-post-title">접지봉 매설 깊이 질문</span><span class="comm-post-stat">조회 412</span></div>
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">전선관 굵기 선정 방법</span><span class="comm-post-stat">추천 19</span></div>
-        </div>
+      <div class="comm-board" onclick="showPage('community');switchCommTab('qna')">
+        <div class="comm-board-header"><div class="comm-icon" style="background:#8B5CF6;color:#fff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">질</div><div class="comm-board-name">질문게시판</div></div>
+        <div class="comm-post-list" id="homeBoard-qna"><div class="comm-post" style="color:var(--text-light);font-size:12px">불러오는 중...</div></div>
       </div>
-      <div class="comm-board" onclick="showPage('community')">
-        <div class="comm-board-header"><div class="comm-icon ic-골조">골</div><div class="comm-board-name">골조 게시판</div></div>
-        <div class="comm-post-list">
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">철근 피복두께 현장 관리 팁</span><span class="comm-post-stat">조회 938</span></div>
-          <div class="comm-post"><span class="comm-post-title">거푸집 해체 시기 기준</span><span class="comm-post-stat">추천 45</span></div>
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">콘크리트 양생 기간 날씨별 정리</span><span class="comm-post-stat">조회 723</span></div>
-          <div class="comm-post"><span class="comm-post-title">슬래브 두께 선정 기준</span><span class="comm-post-stat">추천 31</span></div>
-        </div>
+      <div class="comm-board" onclick="showPage('community');switchCommTab('info')">
+        <div class="comm-board-header"><div class="comm-icon" style="background:#059669;color:#fff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">정</div><div class="comm-board-name">정보게시판</div></div>
+        <div class="comm-post-list" id="homeBoard-info"><div class="comm-post" style="color:var(--text-light);font-size:12px">불러오는 중...</div></div>
       </div>
-      <div class="comm-board" onclick="showPage('community')">
-        <div class="comm-board-header"><div class="comm-icon ic-내장">내</div><div class="comm-board-name">내장 게시판</div></div>
-        <div class="comm-post-list">
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">석고보드 두께별 용도 정리</span><span class="comm-post-stat">조회 567</span></div>
-          <div class="comm-post"><span class="comm-post-title">경량철골 간격 기준 (LGS)</span><span class="comm-post-stat">추천 22</span></div>
-          <div class="comm-post"><span class="comm-post-title">타일 접착제 종류 비교</span><span class="comm-post-stat">조회 489</span></div>
-          <div class="comm-post"><span class="new"></span><span class="comm-post-title">도장 공정 순서 질문</span><span class="comm-post-stat">추천 17</span></div>
-        </div>
+      <div class="comm-board" onclick="showPage('community');switchCommTab('matcmt')">
+        <div class="comm-board-header"><div class="comm-icon" style="background:#E8500A;color:#fff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">자</div><div class="comm-board-name">자재추가설명</div></div>
+        <div class="comm-post-list" id="homeBoard-matcmt"><div class="comm-post" style="color:var(--text-light);font-size:12px">불러오는 중...</div></div>
       </div>
     </div>
   </div>
@@ -1625,6 +1576,13 @@ function initSearchHTML(){
     if(q && q.value.trim()) doSearch();
   });
 
+  // 홈 화면 게시글 로드
+  loadHomeBestPosts();
+  loadHomeBoardPosts('free');
+  loadHomeBoardPosts('qna');
+  loadHomeBoardPosts('info');
+  loadHomeBoardPosts('matcmt');
+
   // pasteModal/pasteArea/fileInput 이벤트 (HTML 생성 후 등록)
   var pm = document.getElementById('pasteModal');
   if(pm) pm.addEventListener('click', function(e){ if(e.target===this) closePasteModal(); });
@@ -1643,3 +1601,52 @@ function initSearchHTML(){
 }
 // DOMContentLoaded 시 실행
 document.addEventListener('DOMContentLoaded', initSearchHTML);
+
+/* ── 홈 베스트 게시글 로드 ── */
+function loadHomeBestPosts(){
+  var el = document.getElementById('homeBestPosts');
+  if(!el) return;
+  fetch('/api/posts.php?action=list&cat=best&limit=4&page=1')
+    .then(function(r){return r.json();})
+    .then(function(res){
+      var posts = (res.posts || []).slice(0,4);
+      if(!posts.length){
+        el.innerHTML='<div style="padding:16px 20px;color:var(--text-light);font-size:13px">게시글이 없습니다.</div>';
+        return;
+      }
+      el.innerHTML = posts.map(function(p,i){
+        var isNew = (Date.now() - new Date(p.created_at).getTime()) < 86400000*3;
+        return '<div onclick="showPage(\'community\');switchCommTab(\'best\')" style="display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border-light);cursor:pointer;transition:background .12s" onmouseover="this.style.background=\'var(--surface)\'" onmouseout="this.style.background=\'\'"> '
+          +'<span style="width:20px;height:20px;background:var(--orange);color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0">'+(i+1)+'</span>'
+          +'<span style="flex:1;font-size:13px;font-weight:500;color:var(--text);overflow:hidden;white-space:nowrap;text-overflow:ellipsis">'+(p.title||'')+'</span>'
+          +(isNew?'<span style="font-size:10px;font-weight:700;color:var(--orange);flex-shrink:0">NEW</span>':'')
+          +'<span style="font-size:11px;color:var(--text-light);flex-shrink:0">추천 '+(p.likes||0)+'</span>'
+          +'</div>';
+      }).join('');
+    })
+    .catch(function(){ if(el) el.innerHTML=''; });
+}
+
+/* ── 홈 게시판별 최근글 로드 ── */
+function loadHomeBoardPosts(cat){
+  var el = document.getElementById('homeBoard-'+cat);
+  if(!el) return;
+  fetch('/api/posts.php?action=list&cat='+cat+'&limit=4&page=1')
+    .then(function(r){return r.json();})
+    .then(function(res){
+      var posts = (res.posts || []).slice(0,4);
+      if(!posts.length){
+        el.innerHTML='<div class="comm-post" style="color:var(--text-light);font-size:12px">등록된 글이 없습니다.</div>';
+        return;
+      }
+      el.innerHTML = posts.map(function(p){
+        var isNew = (Date.now() - new Date(p.created_at).getTime()) < 86400000*2;
+        return '<div class="comm-post">'
+          +(isNew?'<span class="new"></span>':'')
+          +'<span class="comm-post-title">'+(p.title||'')+'</span>'
+          +'<span class="comm-post-stat">조회 '+(p.views||0)+'</span>'
+          +'</div>';
+      }).join('');
+    })
+    .catch(function(){ if(el) el.innerHTML=''; });
+}
