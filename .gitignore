@@ -1,0 +1,11 @@
+# 민감 정보
+naver_users.json
+rss_cache.json
+mat_db.json
+
+# IDE
+.vscode/
+.claude/
+
+# 로그
+*.log

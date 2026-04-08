@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>메카니컬 트리거</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  
+<header>
+  <div class="logo" onclick="showPage('search')">설비트리거<span style="display:block;font-size:9px;font-weight:400;letter-spacing:2px;color:#9C9A92;font-family:'Noto Sans KR',sans-serif;text-transform:uppercase">Mechanical Trigger</span></div>
+  <nav>
+    <a id="nav-search" class="active" onclick="showPage('search')">자재 검색</a>
+    <div class="comm-dropdown" id="commDropdown" onmouseenter="openCommDropdown()" onmouseleave="scheduleCloseCommDropdown()">
+      <a id="nav-community" onclick="showPage('community')">커뮤니티</a>
+      <div class="comm-dropdown-menu" id="commDropdownMenu" onmouseenter="cancelCloseCommDropdown()" onmouseleave="scheduleCloseCommDropdown()">
+        <div class="dmenu-inner">
+          <a onclick="showPage('community');switchCommTab('all');closeCommDropdown()">📋 전체</a>
+          <a onclick="showPage('community');switchCommTab('best');closeCommDropdown()">🏆 베스트</a>
+          <div class="dmenu-divider"></div>
+          <a onclick="showPage('community');switchCommTab('free');closeCommDropdown()">💬 자유</a>
+          <a onclick="showPage('community');switchCommTab('qna');closeCommDropdown()">❓ 질문</a>
+          <a onclick="showPage('community');switchCommTab('info');closeCommDropdown()">📌 정보</a>
+        </div>
+      </div>
+    </div>
+    <a id="nav-job" onclick="showPage('job')">구인구직</a>
+    <a id="nav-company" onclick="showPage('company')">업체 정보</a>
+    <a id="nav-news" onclick="showPage('news')">건설뉴스</a>
+    <a id="nav-safety" onclick="showPage('safety')">건설안전</a>
+    <a id="nav-notice" onclick="showPage('notice')">공지사항</a>
+    <a id="nav-docs" onclick="showPage('docs')" style="color:#A8C4FF">공무자료실</a>
+    <a id="nav-help" onclick="showPage('help')" style="color:#FFB347;font-weight:600">🔧 도움요청</a>
+    <a id="nav-board" onclick="showPage('board')" style="color:#FFB347;font-weight:500">동산보드</a>
+    <a id="nav-matlist" onclick="showPage('matlist')" style="color:#A8C4FF;font-weight:500">📖 자재·용어집</a>
+  </nav>
+  <div class="header-right" id="headerRight">
+    <button class="btn-login" onclick="openLoginModal()">로그인</button>
+    <button class="btn-join" onclick="openJoinModal()">회원가입</button>
+  </div>
+  <div id="msgBellWrap" style="display:none;position:relative;margin-left:4px">
+    <button onclick="openMsgModal()" style="padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:4px;font-size:13px;cursor:pointer;color:var(--text-mid)">📬</button>
+    <span id="msgBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center"></span>
+  </div>
+</header>
+
+<!-- ══ 관리자 ══ -->
+<div class="admin-banner" id="adminBanner"></div>
+<div id="docsDetailModal"></div>
+<div id="adminMemberModal"></div>
+<div id="adminMemberEditModal"></div>
+<div id="chargeReqModal"></div>
+
+<!-- ══ 인증 모달 ══ -->
+<div class="modal-overlay" id="joinModal" style="display:none;z-index:2000"></div>
+<div class="modal-overlay" id="loginModal"></div>
+<div id="msgModal"></div>
+<div id="sendMsgModal"></div>
+<div id="adjustModal"></div>
+<div class="paste-modal-overlay" id="pasteModal"></div>
+
+<!-- ══ 페이지 (JS가 생성) ══ -->
+<div id="page-search"        class="page active"></div>
+<div id="page-community"     class="page"></div>
+<div id="page-job"           class="page"></div>
+<div id="page-company"       class="page"></div>
+<div id="page-notice"        class="page"></div>
+<div id="page-news"          class="page"></div>
+<div id="page-safety"        class="page"></div>
+<div id="page-job-detail"    class="page"></div>
+<div id="page-post-detail"   class="page"></div>
+<div id="page-notice-detail" class="page"></div>
+<div id="page-help"          class="page"></div>
+<div id="page-docs"          class="page"></div>
+<div id="page-board"         class="page"></div>
+<div id="page-photopage"     class="page"></div>
+<div id="page-matlist"       class="page"></div>
+<div id="page-mypage"        class="page"></div>
+
+<!-- ══ 커뮤니티 모달 ══ -->
+<div id="writeModal"></div>
+
+<!-- ══ 도움요청 모달 ══ -->
+<div id="helpWriteModal"></div>
+<div id="helpDetailModal"></div>
+<div id="cashModal"></div>
+<div id="chargePopupModal"></div>
+
+<!-- ══ 공무자료실 모달 ══ -->
+<div id="docsWriteModal"></div>
+
+<!-- ══ 동산보드 모달 ══ -->
+<div id="photoPageModal"></div>
+<div id="groupModal"></div>
+<div id="groupEditModal"></div>
+<div id="dboardModal"></div>
+
+<!-- ══ 마이페이지 모달 ══ -->
+<div id="editNickModal"></div>
+<div id="editPwModal"></div>
+
+<footer>
+  <strong>콘스토어 (CONSTORE)</strong> — 건설업 전문 자재 검색 &amp; 커뮤니티<br>
+  <span style="margin-top:6px;display:block">건설자재 정보 등록 문의: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7b4b8b9a3b6b4a397b4b8b9a4a3b8a5b2f9b4b8f9bca5">[email&#160;protected]</a></span>
+</footer>
+
+
+<!-- ══ JavaScript 분리 파일 ══ -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="js/search.js?v=4"></script>
+<script src="js/board.js?v=3"></script>
+<script src="js/community.js?v=3"></script>
+<script src="js/docs.js?v=3"></script>
+<script src="js/help.js?v=3"></script>
+<script src="js/auth.js?v=7"></script>
+</body>
+</html>
